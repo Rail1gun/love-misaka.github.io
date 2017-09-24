@@ -188,8 +188,8 @@ body {
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 14px;
   line-height: 2;
-  color: #555;
-  background: #fff;
+  color: #ffd700;
+  background: #222;
 }
 @media (max-width: 767px) {
   body {
@@ -951,7 +951,7 @@ pre .javascript .function {
   display: block;
   width: 22px;
   height: 2px;
-  background: #555;
+  background: #ffd700;
   border-radius: 1px;
 }
 .btn-bar+.btn-bar {
@@ -1818,7 +1818,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #292a71;
+  background: #8aff3d;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2602,7 +2602,7 @@ hr {
   margin-top: 80px;
 }
 .header {
-  background: #f5f5f5;
+  background: #000;
 }
 .header-inner {
   padding: 25px 0 20px;
