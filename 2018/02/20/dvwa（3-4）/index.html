@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="File Upload 和 Brute Force">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dvwa（3-4）">
+<meta property="og:url" content="http://yoursite.com/2018/02/20/dvwa（3-4）/index.html">
+<meta property="og:site_name" content="misaka的博客">
+<meta property="og:description" content="File Upload 和 Brute Force">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-20T13:06:03.805Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dvwa（3-4）">
+<meta name="twitter:description" content="File Upload 和 Brute Force">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/20/dvwa（3-4）/"/>
+
+
+
+
+
+  <title>dvwa（3-4） | misaka的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">misaka的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-zhy">
+          <a href="/zhy" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            阳哥专用
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/20/dvwa（3-4）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="misaka">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="misaka的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">dvwa（3-4）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-20T19:52:59+08:00">
+                2018-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>File Upload 和 Brute Force<br><a id="more"></a></p>
+<h2 id="File-Upload"><a href="#File-Upload" class="headerlink" title="File Upload"></a>File Upload</h2><h3 id="low"><a href="#low" class="headerlink" title="low"></a>low</h3><p>源码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;?php </div><div class="line"></div><div class="line">if( isset( $_POST[ &apos;Upload&apos; ] ) ) &#123; </div><div class="line">    // Where are we going to be writing to? </div><div class="line">    $target_path  = DVWA_WEB_PAGE_TO_ROOT . &quot;hackable/uploads/&quot;; </div><div class="line">    $target_path .= basename( $_FILES[ &apos;uploaded&apos; ][ &apos;name&apos; ] ); </div><div class="line"></div><div class="line">    // Can we move the file to the upload folder? </div><div class="line">    if( !move_uploaded_file( $_FILES[ &apos;uploaded&apos; ][ &apos;tmp_name&apos; ], $target_path ) ) &#123; </div><div class="line">        // No </div><div class="line">        echo &apos;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&apos;; </div><div class="line">    &#125; </div><div class="line">    else &#123; </div><div class="line">        // Yes! </div><div class="line">        echo &quot;&lt;pre&gt;&#123;$target_path&#125; succesfully uploaded!&lt;/pre&gt;&quot;; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line"></div><div class="line">?&gt;</div><div class="line"></div><div class="line">``` </div><div class="line">从源码中可以看出，它并没有对上传文件做任何的检查与过滤，而且因为使用了basename()函数，在上传成功后，会返回上传文件的路径。  </div><div class="line">这就很明显的存在文件上传漏洞。</div><div class="line">我上传一个一句话木马：abc.php</div></pre></td></tr></table></figure></p>
+<p>&lt;?php @eval($_POST[‘abc’]);?&gt;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">页面回显：../../hackable/uploads/abc.php succesfully uploaded!  </div><div class="line">成功上传，并回显了文件路径。  </div><div class="line">然后就用菜刀链接，地址构造为：  </div><div class="line">http://127.0.0.1/DVWA/hackable/uploads/abc.php  </div><div class="line">成功拿到shell。</div><div class="line">### medium</div><div class="line">先看代码</div></pre></td></tr></table></figure></p>
+<p>&lt;?php </p>
+<p>if( isset( $_POST[ ‘Upload’ ] ) ) {<br>    // Where are we going to be writing to?<br>    $target_path  = DVWA_WEB_PAGE_TO_ROOT . “hackable/uploads/“;<br>    $target_path .= basename( $_FILES[ ‘uploaded’ ][ ‘name’ ] ); </p>
+<pre><code>// File information 
+$uploaded_name = $_FILES[ &apos;uploaded&apos; ][ &apos;name&apos; ]; 
+$uploaded_type = $_FILES[ &apos;uploaded&apos; ][ &apos;type&apos; ]; 
+$uploaded_size = $_FILES[ &apos;uploaded&apos; ][ &apos;size&apos; ]; 
+
+// Is it an image? 
+if( ( $uploaded_type == &quot;image/jpeg&quot; || $uploaded_type == &quot;image/png&quot; ) &amp;&amp; 
+    ( $uploaded_size &lt; 100000 ) ) { 
+
+    // Can we move the file to the upload folder? 
+    if( !move_uploaded_file( $_FILES[ &apos;uploaded&apos; ][ &apos;tmp_name&apos; ], $target_path ) ) { 
+        // No 
+        echo &apos;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&apos;; 
+    } 
+    else { 
+        // Yes! 
+        echo &quot;&lt;pre&gt;{$target_path} succesfully uploaded!&lt;/pre&gt;&quot;; 
+    } 
+} 
+else { 
+    // Invalid file 
+    echo &apos;&lt;pre&gt;Your image was not uploaded. We can only accept JPEG or PNG images.&lt;/pre&gt;&apos;; 
+} 
+</code></pre><p>} </p>
+<p>?&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">从源码中得知，源码对上传文件的后缀与文件大小进行了限制。  </div><div class="line">限制了文件后缀名只能为png或jepg，文件大小不能超出100000B  </div><div class="line">因为我们上传的是一句话木马，文件本身很小，不需要理会文件大小的限制。</div><div class="line">至于怎么绕过后缀限制，可以用抓包软件抓包然后更改。  </div><div class="line">上传一句话：abc.png</div></pre></td></tr></table></figure>
+<p>&lt;?php @eval($_POST[‘abc’]);?&gt;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">抓包，在burpsuite里将abc.png改为abc.php,然后用菜刀链接，成功得到shell。（这个方法能用的原因是，对后缀的过滤是在本地完成的，在服务器端并没有过滤。)  </div><div class="line"></div><div class="line">还有一种绕过方法，使用%00截断，但这个方法需要php的版本号小于5.3.4</div><div class="line">使用方法：上传文件的命名为：abc.php%00.png </div><div class="line">在本地的时候，此文件的后缀为.png 自然绕过了过滤，在服务器端的时候，服务区解析到%00的时候就会停止解析，这时，文件名就为abc.php</div><div class="line">### high</div><div class="line">先看代码</div></pre></td></tr></table></figure></p>
+<p>&lt;?php </p>
+<p>if( isset( $_POST[ ‘Upload’ ] ) ) {<br>    // Where are we going to be writing to?<br>    $target_path  = DVWA_WEB_PAGE_TO_ROOT . “hackable/uploads/“;<br>    $target_path .= basename( $_FILES[ ‘uploaded’ ][ ‘name’ ] ); </p>
+<pre><code>// File information 
+$uploaded_name = $_FILES[ &apos;uploaded&apos; ][ &apos;name&apos; ]; 
+$uploaded_ext  = substr( $uploaded_name, strrpos( $uploaded_name, &apos;.&apos; ) + 1); 
+$uploaded_size = $_FILES[ &apos;uploaded&apos; ][ &apos;size&apos; ]; 
+$uploaded_tmp  = $_FILES[ &apos;uploaded&apos; ][ &apos;tmp_name&apos; ]; 
+
+// Is it an image? 
+if( ( strtolower( $uploaded_ext ) == &quot;jpg&quot; || strtolower( $uploaded_ext ) == &quot;jpeg&quot; || strtolower( $uploaded_ext ) == &quot;png&quot; ) &amp;&amp; 
+    ( $uploaded_size &lt; 100000 ) &amp;&amp; 
+    getimagesize( $uploaded_tmp ) ) { 
+
+    // Can we move the file to the upload folder? 
+    if( !move_uploaded_file( $uploaded_tmp, $target_path ) ) { 
+        // No 
+        echo &apos;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&apos;; 
+    } 
+    else { 
+        // Yes! 
+        echo &quot;&lt;pre&gt;{$target_path} succesfully uploaded!&lt;/pre&gt;&quot;; 
+    } 
+} 
+else { 
+    // Invalid file 
+    echo &apos;&lt;pre&gt;Your image was not uploaded. We can only accept JPEG or PNG images.&lt;/pre&gt;&apos;; 
+} 
+</code></pre><p>} </p>
+<p>?&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">从源码中的得知，它只允许.jpeg .jpg .png 这三个文件后缀来上传，并且限制了上传文件的大小。  </div><div class="line"></div><div class="line">比起medium级别的源码，high级别的源码加入了一个新函数;getimagesize()</div><div class="line">这个函数限制了上传文件的文件头必须是图片的文件头。  </div><div class="line">这几个过滤可以使用图片马来实现绕过。 </div><div class="line"></div><div class="line">制作图片马方法：</div><div class="line">1.	找到一个很小的图片（上传文件有大小限制）</div><div class="line">2.	将文件用winhex打开</div><div class="line">3.	将一句话木马复制到图片的最下面</div><div class="line"></div><div class="line">还有一种制作图片马的方法：</div><div class="line">copy 1.png/b+abc.php 2.png   </div><div class="line">这样的图片马就可以直接上传成功。  </div><div class="line">但是菜刀却链接图片马失败。原因是一句话被当做了图片文件来执行。</div><div class="line">我查询了资料，说是可以联合文件包含漏洞来让服务器将图片马解析为php文件。联想之前做的本地文件包含中的file协议。</div><div class="line">### impossible</div></pre></td></tr></table></figure>
+<p>&lt;?php </p>
+<p>if( isset( $_POST[ ‘Upload’ ] ) ) {<br>    // Check Anti-CSRF token<br>    checkToken( $_REQUEST[ ‘user_token’ ], $_SESSION[ ‘session_token’ ], ‘index.php’ ); </p>
+<pre><code>// File information 
+$uploaded_name = $_FILES[ &apos;uploaded&apos; ][ &apos;name&apos; ]; 
+$uploaded_ext  = substr( $uploaded_name, strrpos( $uploaded_name, &apos;.&apos; ) + 1); 
+$uploaded_size = $_FILES[ &apos;uploaded&apos; ][ &apos;size&apos; ]; 
+$uploaded_type = $_FILES[ &apos;uploaded&apos; ][ &apos;type&apos; ]; 
+$uploaded_tmp  = $_FILES[ &apos;uploaded&apos; ][ &apos;tmp_name&apos; ]; 
+
+// Where are we going to be writing to? 
+$target_path   = DVWA_WEB_PAGE_TO_ROOT . &apos;hackable/uploads/&apos;; 
+//$target_file   = basename( $uploaded_name, &apos;.&apos; . $uploaded_ext ) . &apos;-&apos;; 
+$target_file   =  md5( uniqid() . $uploaded_name ) . &apos;.&apos; . $uploaded_ext; 
+$temp_file     = ( ( ini_get( &apos;upload_tmp_dir&apos; ) == &apos;&apos; ) ? ( sys_get_temp_dir() ) : ( ini_get( &apos;upload_tmp_dir&apos; ) ) ); 
+$temp_file    .= DIRECTORY_SEPARATOR . md5( uniqid() . $uploaded_name ) . &apos;.&apos; . $uploaded_ext; 
+
+// Is it an image? 
+if( ( strtolower( $uploaded_ext ) == &apos;jpg&apos; || strtolower( $uploaded_ext ) == &apos;jpeg&apos; || strtolower( $uploaded_ext ) == &apos;png&apos; ) &amp;&amp; 
+    ( $uploaded_size &lt; 100000 ) &amp;&amp; 
+    ( $uploaded_type == &apos;image/jpeg&apos; || $uploaded_type == &apos;image/png&apos; ) &amp;&amp; 
+    getimagesize( $uploaded_tmp ) ) { 
+
+    // Strip any metadata, by re-encoding image (Note, using php-Imagick is recommended over php-GD) 
+    if( $uploaded_type == &apos;image/jpeg&apos; ) { 
+        $img = imagecreatefromjpeg( $uploaded_tmp ); 
+        imagejpeg( $img, $temp_file, 100); 
+    } 
+    else { 
+        $img = imagecreatefrompng( $uploaded_tmp ); 
+        imagepng( $img, $temp_file, 9); 
+    } 
+    imagedestroy( $img ); 
+
+    // Can we move the file to the web root from the temp folder? 
+    if( rename( $temp_file, ( getcwd() . DIRECTORY_SEPARATOR . $target_path . $target_file ) ) ) { 
+        // Yes! 
+        echo &quot;&lt;pre&gt;&lt;a href=&apos;${target_path}${target_file}&apos;&gt;${target_file}&lt;/a&gt; succesfully uploaded!&lt;/pre&gt;&quot;; 
+    } 
+    else { 
+        // No 
+        echo &apos;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&apos;; 
+    } 
+
+    // Delete any temp files 
+    if( file_exists( $temp_file ) ) 
+        unlink( $temp_file ); 
+} 
+else { 
+    // Invalid file 
+    echo &apos;&lt;pre&gt;Your image was not uploaded. We can only accept JPEG or PNG images.&lt;/pre&gt;&apos;; 
+} 
+</code></pre><p>} </p>
+<p>// Generate Anti-CSRF token<br>generateSessionToken(); </p>
+<p>?&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">&lt;?php </div><div class="line"></div><div class="line">if( isset( $_POST[ &apos;Upload&apos; ] ) ) &#123; </div><div class="line">    // Check Anti-CSRF token </div><div class="line">    checkToken( $_REQUEST[ &apos;user_token&apos; ], $_SESSION[ &apos;session_token&apos; ], &apos;index.php&apos; ); </div><div class="line"></div><div class="line"></div><div class="line">    // File information </div><div class="line">    $uploaded_name = $_FILES[ &apos;uploaded&apos; ][ &apos;name&apos; ]; </div><div class="line">    $uploaded_ext  = substr( $uploaded_name, strrpos( $uploaded_name, &apos;.&apos; ) + 1); </div><div class="line">    $uploaded_size = $_FILES[ &apos;uploaded&apos; ][ &apos;size&apos; ]; </div><div class="line">    $uploaded_type = $_FILES[ &apos;uploaded&apos; ][ &apos;type&apos; ]; </div><div class="line">    $uploaded_tmp  = $_FILES[ &apos;uploaded&apos; ][ &apos;tmp_name&apos; ]; </div><div class="line"></div><div class="line">    // Where are we going to be writing to? </div><div class="line">    $target_path   = DVWA_WEB_PAGE_TO_ROOT . &apos;hackable/uploads/&apos;; </div><div class="line">    //$target_file   = basename( $uploaded_name, &apos;.&apos; . $uploaded_ext ) . &apos;-&apos;; </div><div class="line">    $target_file   =  md5( uniqid() . $uploaded_name ) . &apos;.&apos; . $uploaded_ext; </div><div class="line">    $temp_file     = ( ( ini_get( &apos;upload_tmp_dir&apos; ) == &apos;&apos; ) ? ( sys_get_temp_dir() ) : ( ini_get( &apos;upload_tmp_dir&apos; ) ) ); </div><div class="line">    $temp_file    .= DIRECTORY_SEPARATOR . md5( uniqid() . $uploaded_name ) . &apos;.&apos; . $uploaded_ext; </div><div class="line"></div><div class="line">    // Is it an image? </div><div class="line">    if( ( strtolower( $uploaded_ext ) == &apos;jpg&apos; || strtolower( $uploaded_ext ) == &apos;jpeg&apos; || strtolower( $uploaded_ext ) == &apos;png&apos; ) &amp;&amp; </div><div class="line">        ( $uploaded_size &lt; 100000 ) &amp;&amp; </div><div class="line">        ( $uploaded_type == &apos;image/jpeg&apos; || $uploaded_type == &apos;image/png&apos; ) &amp;&amp; </div><div class="line">        getimagesize( $uploaded_tmp ) ) &#123; </div><div class="line"></div><div class="line">        // Strip any metadata, by re-encoding image (Note, using php-Imagick is recommended over php-GD) </div><div class="line">        if( $uploaded_type == &apos;image/jpeg&apos; ) &#123; </div><div class="line">            $img = imagecreatefromjpeg( $uploaded_tmp ); </div><div class="line">            imagejpeg( $img, $temp_file, 100); </div><div class="line">        &#125; </div><div class="line">        else &#123; </div><div class="line">            $img = imagecreatefrompng( $uploaded_tmp ); </div><div class="line">            imagepng( $img, $temp_file, 9); </div><div class="line">        &#125; </div><div class="line">        imagedestroy( $img ); </div><div class="line"></div><div class="line">        // Can we move the file to the web root from the temp folder? </div><div class="line">        if( rename( $temp_file, ( getcwd() . DIRECTORY_SEPARATOR . $target_path . $target_file ) ) ) &#123; </div><div class="line">            // Yes! </div><div class="line">            echo &quot;&lt;pre&gt;&lt;a href=&apos;$&#123;target_path&#125;$&#123;target_file&#125;&apos;&gt;$&#123;target_file&#125;&lt;/a&gt; succesfully uploaded!&lt;/pre&gt;&quot;; </div><div class="line">        &#125; </div><div class="line">        else &#123; </div><div class="line">            // No </div><div class="line">            echo &apos;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&apos;; </div><div class="line">        &#125; </div><div class="line"></div><div class="line">        // Delete any temp files </div><div class="line">        if( file_exists( $temp_file ) ) </div><div class="line">            unlink( $temp_file ); </div><div class="line">    &#125; </div><div class="line">    else &#123; </div><div class="line">        // Invalid file </div><div class="line">        echo &apos;&lt;pre&gt;Your image was not uploaded. We can only accept JPEG or PNG images.&lt;/pre&gt;&apos;; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line"></div><div class="line">// Generate Anti-CSRF token </div><div class="line">generateSessionToken(); </div><div class="line"></div><div class="line">?&gt;</div><div class="line">让我们来分析下源码:  </div><div class="line">1.	加入了Anti-csrf token 的验证机制，防止了csrf攻击（前面做的题中前面几个级别的基本上都没有加入防止csrf攻击的验证代码）</div><div class="line">2.	没有使用basename()函数了，也就是说，上传成功后不会回显上传文件位置</div><div class="line">3.	使用了MD5（）对文件名进行了加密，使我们不能在文件名中做手脚，比如%00截断就不能用了。</div><div class="line">4.	限制了上传文件的后缀必需是 .jpg||.png||.jpeg</div><div class="line">5.	限制了上传文件的大小</div><div class="line">6.	使用imagecreatefromjpeg()从上传文件中取得图像，并使用imagejpeg()和imagepng()重新写出了图片文件，然后使用imagedestroy()删除原上传的文件。这样处理的话，high级别使用的图片马的方法在这里就不适用了，因为它重写了上传文件，使其只剩下一个单纯的图片文件。</div><div class="line">------</div><div class="line">## Brute Force</div><div class="line">### low</div></pre></td></tr></table></figure>
+<p>&lt;?php </p>
+<p>if( isset( $_GET[ ‘Login’ ] ) ) {<br>    // Get username<br>    $user = $_GET[ ‘username’ ]; </p>
+<pre><code>// Get password 
+$pass = $_GET[ &apos;password&apos; ]; 
+$pass = md5( $pass ); 
+
+// Check the database 
+$query  = &quot;SELECT * FROM `users` WHERE user = &apos;$user&apos; AND password = &apos;$pass&apos;;&quot;; 
+$result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; ); 
+
+if( $result &amp;&amp; mysqli_num_rows( $result ) == 1 ) { 
+    // Get users details 
+    $row    = mysqli_fetch_assoc( $result ); 
+    $avatar = $row[&quot;avatar&quot;]; 
+
+    // Login successful 
+    echo &quot;&lt;p&gt;Welcome to the password protected area {$user}&lt;/p&gt;&quot;; 
+    echo &quot;&lt;img src=\&quot;{$avatar}\&quot; /&gt;&quot;; 
+} 
+else { 
+    // Login failed 
+    echo &quot;&lt;pre&gt;&lt;br /&gt;Username and/or password incorrect.&lt;/pre&gt;&quot;; 
+} 
+
+((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res); 
+</code></pre><p>} </p>
+<p>?&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">分析代码：  </div><div class="line">1.  虽然这道题是爆破的，但我还是一眼就看出了他的sql注入漏洞，对传入的参数没有任何的检查与过滤。所以这可以参考sql注入的low等级进行注入攻击。若不需要爆出密码具体是多少的话可以使用以下语句直接登陆：</div><div class="line">Username=admin’#</div><div class="line">这样就可以直接以管理员的身份登陆了(前提是管理员的用户名为默认的admin)</div><div class="line">2. 然后来说如何使用爆破来做这道题。代码中并没有对提交登陆的次数限制，也没有时间限制，这时候我们就可以使用brupsuite来爆破密码，先使用brupsuite抓包，然后复制到intruder模块，将需要进行爆破的参数的内容的两边加$,比如这次我要爆破password参数只需要将password=123改为password=$123$ 注意，不能爆破太多参数，爆破时间将会成乘积型增长。</div><div class="line"></div><div class="line">## medium</div></pre></td></tr></table></figure>
+<p>&lt;?php </p>
+<p>if( isset( $_GET[ ‘Login’ ] ) ) {<br>    // Sanitise username input<br>    $user = $_GET[ ‘username’ ];<br>    $user = ((isset($GLOBALS[“<strong>_mysqli_ston”]) &amp;&amp; is<em>object($GLOBALS[“</em></strong>mysqli_ston”])) ? mysqli_real_escape_string($GLOBALS[“___mysqli_ston”],  $user ) : ((trigger_error(“[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.”, E_USER_ERROR)) ? “” : “”)); </p>
+<pre><code>// Sanitise password input 
+$pass = $_GET[ &apos;password&apos; ]; 
+$pass = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;)); 
+$pass = md5( $pass ); 
+
+// Check the database 
+$query  = &quot;SELECT * FROM `users` WHERE user = &apos;$user&apos; AND password = &apos;$pass&apos;;&quot;; 
+$result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; ); 
+
+if( $result &amp;&amp; mysqli_num_rows( $result ) == 1 ) { 
+    // Get users details 
+    $row    = mysqli_fetch_assoc( $result ); 
+    $avatar = $row[&quot;avatar&quot;]; 
+
+    // Login successful 
+    echo &quot;&lt;p&gt;Welcome to the password protected area {$user}&lt;/p&gt;&quot;; 
+    echo &quot;&lt;img src=\&quot;{$avatar}\&quot; /&gt;&quot;; 
+} 
+else { 
+    // Login failed 
+    sleep( 2 ); 
+    echo &quot;&lt;pre&gt;&lt;br /&gt;Username and/or password incorrect.&lt;/pre&gt;&quot;; 
+} 
+
+((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res); 
+</code></pre><p>} </p>
+<p>?&gt;</p>
+<p>```<br>分析源码：</p>
+<ol>
+<li>和sql注入的medium难度一样，添加了mysql_real_escape_string()<br>将\x00  \n  \r  \  ‘  ‘’  \x1a 这几个字符转义。这个就很难注入了。</li>
+<li>对于爆破的防范方法，这里就只用了个sleep()函数，也就是说，没查询失败一次，暂停两秒之后才能进行下一次的查询，如果字典太大的话，需要的时间就会很多了。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/avatar.gif"
+              alt="misaka" />
+          
+            <p class="site-author-name" itemprop="name">misaka</p>
+            <p class="site-description motion-element" itemprop="description">学习使我快乐！！！(不接受反驳)</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#File-Upload"><span class="nav-number">1.</span> <span class="nav-text">File Upload</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#low"><span class="nav-number">1.1.</span> <span class="nav-text">low</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">misaka</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博主已经辛辛苦苦滴码了2.2k字，加油</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+    <script type="text/javascript" src="/live2d/script.js"></script>
+    <canvas id="live2dcanvas" width="150" height="300" class="live2d"></canvas>
+    <style>
+      #live2dcanvas {
+        position: fixed;
+        right: 0px;
+        z-index: 999;
+        pointer-events: none;
+        bottom: -60px;
+      }
+    </style>
+    <script>loadlive2d("live2dcanvas" ,"/live2d/assets/tororo/tororo.model.json",0.5)</script>
+  	
+</body>
+</html>
