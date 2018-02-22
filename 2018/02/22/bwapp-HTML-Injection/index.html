@@ -103,13 +103,13 @@
 <meta property="og:description" content="感觉和xss差不多哈 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/373A3CB6ED704A65A31CEE0F5E2C83F1/968">
-<meta property="og:image" content="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/9BD50E8974904457A600F463CC161A4F/965">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/269AEB66E3B340B6A1572A4656A31ED8/1018">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/8A561DD93EEF4342B5FD46E8BD95D6D8/975">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/AE5C055050CB4385BFF25861D10FAEBE/1049">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/4E60F0D5A14B47F1A629EE1905DF3CA7/1057">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/D85C196A89DE4B1694466BCF78567312/1068">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/269AEB66E3B340B6A1572A4656A31ED8/1018">
-<meta property="og:updated_time" content="2018-02-22T13:31:26.503Z">
+<meta property="og:updated_time" content="2018-02-22T13:42:23.277Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[bwapp] HTML Injection">
 <meta name="twitter:description" content="感觉和xss差不多哈 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄">
@@ -334,8 +334,8 @@
 
       
         <p>感觉和xss差不多哈 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄<br><a id="more"></a></p>
-<h2 id="HTML-Injection-Reflected-GET"><a href="#HTML-Injection-Reflected-GET" class="headerlink" title="HTML Injection - Reflected (GET)"></a>HTML Injection - Reflected (GET)</h2><h3 id="low"><a href="#low" class="headerlink" title="low"></a>low</h3><p>看图，是一个登陆页面，看到登陆页面就不可避免的想到sql，可惜这个不是。<br><img src="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/373A3CB6ED704A65A31CEE0F5E2C83F1/968" alt="image">  </p>
-<p>low级别的，直接来个<script>alert(“good”)</script>试一下。<br>成功弹窗<br><img src="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/9BD50E8974904457A600F463CC161A4F/965" alt="image"><br>果然这个low级别的算是相当的基础了。</p>
+<h2 id="HTML-Injection-Reflected-GET"><a href="#HTML-Injection-Reflected-GET" class="headerlink" title="HTML Injection - Reflected (GET)"></a>HTML Injection - Reflected (GET)</h2><h3 id="low"><a href="#low" class="headerlink" title="low"></a>low</h3><p>看图，是一个登陆页面，看到登陆页面就不可避免的想到sql，可惜这个不是。<br><img src="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/373A3CB6ED704A65A31CEE0F5E2C83F1/968" alt="图">  </p>
+<p>low级别的，直接来个<script>alert(“good”)</script>试一下。<br>成功弹窗<br><img src="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/269AEB66E3B340B6A1572A4656A31ED8/1018" alt="image"><br>果然这个low级别的算是相当的基础了。</p>
 <h3 id="medium"><a href="#medium" class="headerlink" title="medium"></a>medium</h3><p>尝试下low级别的攻击代码<script>alert(“good”)</script><br>但是并没有弹窗，返回的是<br><img src="https://note.youdao.com/yws/public/resource/2ac314ca452c9419dd048861fbff8922/xmlnote/8A561DD93EEF4342B5FD46E8BD95D6D8/975" alt="image">  </p>
 <p>发现把我所有的输入都直接返回了，什么都没有少，这就可以初步认为这并不是过滤敏感字符串。那么可能就是将html符号实体化了，这个可以试试将符号编码。  攻击代码%3cscript%3ealert(“good”)%3c/script%3e<br>其中%3c是&lt;,%3e是&gt;<br>然后就成功弹窗了。  </p>
 <h2 id="HTML-Injection-Reflected-POST"><a href="#HTML-Injection-Reflected-POST" class="headerlink" title="HTML Injection - Reflected (POST)"></a>HTML Injection - Reflected (POST)</h2><p>post注入和get型注入其实攻击代码都一样，这是数据传入的方式不同。一个是get输入的，一个使用post。因为攻击手法相同，我就不多做记录了。</p>
