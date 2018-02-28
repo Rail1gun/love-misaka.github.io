@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="之前也接触过许多的web漏洞，但学习的很杂，不够系统，也不够深入。所以我决定重新开始系统的学习这些web漏洞，文件上传就是第一个。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件上传基础">
+<meta property="og:url" content="http://yoursite.com/2018/03/01/Untitled/index.html">
+<meta property="og:site_name" content="misaka的博客">
+<meta property="og:description" content="之前也接触过许多的web漏洞，但学习的很杂，不够系统，也不够深入。所以我决定重新开始系统的学习这些web漏洞，文件上传就是第一个。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-28T16:01:37.782Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="文件上传基础">
+<meta name="twitter:description" content="之前也接触过许多的web漏洞，但学习的很杂，不够系统，也不够深入。所以我决定重新开始系统的学习这些web漏洞，文件上传就是第一个。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/01/Untitled/"/>
+
+
+
+
+
+  <title>文件上传基础 | misaka的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">misaka的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-zhy">
+          <a href="/zhy" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            阳哥专用
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/01/Untitled/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="misaka">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="misaka的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">文件上传基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-01T00:01:11+08:00">
+                2018-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前也接触过许多的web漏洞，但学习的很杂，不够系统，也不够深入。所以我决定重新开始系统的学习这些web漏洞，文件上传就是第一个。<br><a id="more"></a></p>
+<h2 id="文件上传-恶意文件检测"><a href="#文件上传-恶意文件检测" class="headerlink" title="文件上传 恶意文件检测"></a>文件上传 恶意文件检测</h2><p>文件上传有许多检测上传文件是否为恶意文件的方法，这里列举一些：  </p>
+<ul>
+<li>客户端检测(JavaScript检测)</li>
+<li>服务端MIME类型检测</li>
+<li>服务端文件扩展名检测</li>
+<li>服务端文件内容检测  </li>
+</ul>
+<p>虽然这些检测方式都容易被绕过，但是我还是分别介绍下这几种检测方式。  </p>
+<h3 id="客户端检测"><a href="#客户端检测" class="headerlink" title="客户端检测"></a>客户端检测</h3><p>这类检测，通常是在上传页面中含有检测文件的JavaScript代码，测试代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;meta charset=&quot;utf-8&quot;&gt;</div><div class="line">&lt;title&gt;文件上传&lt;/title&gt;</div><div class="line">&lt;!--客户端JavaScript检测文件后缀的代码。</div><div class="line">还可以用来检测文件大小，这里没有举例 --&gt;</div><div class="line">&lt;!--</div><div class="line">&lt;script type=&quot;text/javascript&quot;&gt;</div><div class="line">function checkFileExt(filename)</div><div class="line">&#123;</div><div class="line"> var flag = false; </div><div class="line"> var arr = [&quot;jpg&quot;,&quot;png&quot;,&quot;gif&quot;];</div><div class="line"> var index = filename.lastIndexOf(&quot;.&quot;);</div><div class="line"> var ext = filename.substr(index+1);</div><div class="line"> for(var i=0;i&lt;arr.length;i++)</div><div class="line"> &#123;</div><div class="line">  if(ext == arr[i])</div><div class="line">  &#123;</div><div class="line">   flag = true; </div><div class="line">   break;</div><div class="line">  &#125;</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> if(!flag)</div><div class="line"> &#123;</div><div class="line">  alert(&quot;错误！必须是图片文件&quot;);</div><div class="line"> &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">&lt;/script&gt;</div><div class="line">--&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line"></div><div class="line">&lt;form action=&quot;upload_file.php&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</div><div class="line">	&lt;label for=&quot;file&quot;&gt;文件名：&lt;/label&gt;</div><div class="line">	&lt;input type=&quot;file&quot; name=&quot;file&quot; id=&quot;file&quot; onchange=&quot;checkFileExt(this.value)&quot;&gt;&lt;br&gt;</div><div class="line">	&lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;提交&quot;&gt;</div><div class="line">&lt;/form&gt;</div><div class="line"></div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<p>这里的JavaScript代码是只允许上传文件后缀为jpg，png，gif的文件。(注意：此时客户端并没有发送数据包给服器务端)<br>这种检测方式的判断方式是在加载文件后，还未点击上传按钮，就已经显示上传错误(或者使用抓包软件如 burp 看看是否抓到数据包，若没有，则是客户端检测)<br><strong>绕过</strong>：  </p>
+<ol>
+<li>将欲上传的文件后缀名改为允许上传的后缀名，然后使用burpsuite进行抓包，再将后缀名改回来。</li>
+<li>直接禁用上传页面的JavaScript脚本。  <h3 id="服务端MIME检测"><a href="#服务端MIME检测" class="headerlink" title="服务端MIME检测"></a>服务端MIME检测</h3>这种检测方法是检测http包中的Content-Type的值。<br>检测代码如下：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">//****************************************</div><div class="line">//服务器端MIME类型检测</div><div class="line">/*</div><div class="line">if (($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/gif&quot;)</div><div class="line">&amp;&amp; ($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/jpeg&quot;)</div><div class="line">&amp;&amp; ($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/jpg&quot;)</div><div class="line">&amp;&amp; ($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/pjpeg&quot;)</div><div class="line">&amp;&amp; ($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/x-png&quot;)</div><div class="line">&amp;&amp; ($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/png&quot;))</div><div class="line">	$flag=0;  //当flag为0时检测不通过</div><div class="line">*/</div><div class="line">//****************************************</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>绕过</strong>：<br>使用抓包软件burpsuite，抓包，更改Content-Type的值为服务器允许上传的值，例如  image/jpeg，image/png，image/gif。  </p>
+<h3 id="服务端文件扩展名检测"><a href="#服务端文件扩展名检测" class="headerlink" title="服务端文件扩展名检测"></a>服务端文件扩展名检测</h3><p>服务器端文件后缀名检测是很常见的一种做法。一般使用白名单或者是黑名单进行检测。通常来说，使用白名单的安全性会比黑名单高，因为使用黑名单有被绕过的可能，但是也不是说使用白名单就一定是安全的。<br>先看看代码吧<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//****************************************</div><div class="line">// 允许上传的图片后缀</div><div class="line">$allowedExts = array(&quot;gif&quot;, &quot;jpeg&quot;, &quot;jpg&quot;, &quot;png&quot;);</div><div class="line">$temp = explode(&quot;.&quot;, $_FILES[&quot;file&quot;][&quot;name&quot;]);</div><div class="line">$extension = end($temp);     // 获取文件后缀名</div><div class="line">//服务器端文件名后缀检测 （白名单）</div><div class="line">//if(!in_array($extension, $allowedExts))</div><div class="line">//	$flag=0;  //flag为0时检测不通过</div><div class="line">//****************************************</div></pre></td></tr></table></figure></p>
+<p>上面的代码是白名单，黑名单的检测代码以后我再补充。<br><strong>绕过：</strong><br>白名单绕过：  </p>
+<ul>
+<li>对与一些低版本的服务器有00截断的漏洞，可以使用00截断来绕过。</li>
+<li>利用解析漏洞来配合攻击。<br>黑名单绕过：  </li>
+<li>文件名大小写，双写绕过</li>
+<li>使用黑名单里没有的后缀进行攻击</li>
+<li>特殊文件名绕过： 如：asp_</li>
+<li>还有很多方法，以后慢慢补充  </li>
+</ul>
+<h3 id="服务端文件内容检测"><a href="#服务端文件内容检测" class="headerlink" title="服务端文件内容检测"></a>服务端文件内容检测</h3><p>有些服务器会检测文件的内容，这个时候只需要在一个完整的文件了注入恶意攻击代码就可以绕过，或者加入文件头：  </p>
+<ul>
+<li>JPG ： FF D8 FF E0 00 10 4A 46 49 46</li>
+<li>GIF ： 47 49 46 38 39 61 (GIF89a)</li>
+<li>PNG： 89 50 4E 47<br>推荐使用GIF89a，因为这个全部都是可显示的字符。<br>看看代码：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//****************************************</div><div class="line"></div><div class="line">//服务端文件内容检测</div><div class="line">$filesize=getimagesize($_FILES[&quot;file&quot;][&quot;tmp_name&quot;]);</div><div class="line">if($filesize==FALSE)</div><div class="line">	$flag=0;</div><div class="line"></div><div class="line">//****************************************</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>getimagesize() 函数用于获取图像大小及相关信息，成功返回一个数组，失败则返回 FALSE 。  </p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>完整代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">header(&quot;Content-type:text/html;charset=utf-8&quot;);</div><div class="line">$flag=1;</div><div class="line">// 允许上传的图片后缀</div><div class="line">$allowedExts = array(&quot;gif&quot;, &quot;jpeg&quot;, &quot;jpg&quot;, &quot;png&quot;);</div><div class="line">$temp = explode(&quot;.&quot;, $_FILES[&quot;file&quot;][&quot;name&quot;]);</div><div class="line">$extension = end($temp);     // 获取文件后缀名</div><div class="line">//echo $_FILES[&quot;file&quot;][&quot;size&quot;]; //输出文件的大小</div><div class="line">//****************************************</div><div class="line">//服务器端MIME类型检测</div><div class="line">/*</div><div class="line">if (($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/gif&quot;)</div><div class="line">&amp;&amp; ($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/jpeg&quot;)</div><div class="line">&amp;&amp; ($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/jpg&quot;)</div><div class="line">&amp;&amp; ($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/pjpeg&quot;)</div><div class="line">&amp;&amp; ($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/x-png&quot;)</div><div class="line">&amp;&amp; ($_FILES[&quot;file&quot;][&quot;type&quot;] != &quot;image/png&quot;))</div><div class="line">	$flag=0;</div><div class="line">*/</div><div class="line">//****************************************</div><div class="line">//文件大小限制</div><div class="line">//if(!$_FILES[&quot;file&quot;][&quot;size&quot;] &lt; 204800)</div><div class="line">//	$flag=0;</div><div class="line">//****************************************</div><div class="line">//服务器端文件名后缀检测 （白名单）</div><div class="line">//if(!in_array($extension, $allowedExts))</div><div class="line">//	$flag=0;</div><div class="line">//****************************************</div><div class="line"></div><div class="line">//服务端文件内容检测</div><div class="line">$filesize=getimagesize($_FILES[&quot;file&quot;][&quot;tmp_name&quot;]);</div><div class="line">if($filesize==FALSE)</div><div class="line">	$flag=0;</div><div class="line"></div><div class="line">//****************************************</div><div class="line">	if($flag==1)</div><div class="line">	&#123;</div><div class="line">	if ($_FILES[&quot;file&quot;][&quot;error&quot;] &gt; 0)</div><div class="line">	&#123;</div><div class="line">		echo &quot;错误：: &quot; . $_FILES[&quot;file&quot;][&quot;error&quot;] . &quot;&lt;br&gt;&quot;;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">		echo &quot;上传文件名: &quot; . $_FILES[&quot;file&quot;][&quot;name&quot;] . &quot;&lt;br&gt;&quot;;</div><div class="line">		echo &quot;文件类型: &quot; . $_FILES[&quot;file&quot;][&quot;type&quot;] . &quot;&lt;br&gt;&quot;;</div><div class="line">		echo &quot;文件大小: &quot; . ($_FILES[&quot;file&quot;][&quot;size&quot;] / 1024) . &quot; kB&lt;br&gt;&quot;;</div><div class="line">		echo &quot;文件临时存储的位置: &quot; . $_FILES[&quot;file&quot;][&quot;tmp_name&quot;] . &quot;&lt;br&gt;&quot;;</div><div class="line">		</div><div class="line">		// 判断当期目录下的 upload 目录是否存在该文件</div><div class="line">		// 如果没有 upload 目录，你需要创建它，upload 目录权限为 777</div><div class="line">		if (file_exists(&quot;upload/&quot; . $_FILES[&quot;file&quot;][&quot;name&quot;]))</div><div class="line">		&#123;</div><div class="line">			echo $_FILES[&quot;file&quot;][&quot;name&quot;] . &quot; 文件已经存在。 &quot;;</div><div class="line">		&#125;</div><div class="line">		else</div><div class="line">		&#123;</div><div class="line">			// 如果 upload 目录不存在该文件则将文件上传到 upload 目录下</div><div class="line">			move_uploaded_file($_FILES[&quot;file&quot;][&quot;tmp_name&quot;], &quot;upload/&quot; . $_FILES[&quot;file&quot;][&quot;name&quot;]);</div><div class="line">			echo &quot;文件存储在: &quot; . &quot;upload/&quot; . $_FILES[&quot;file&quot;][&quot;name&quot;];</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">else</div><div class="line">&#123;</div><div class="line">	echo &quot;非法的文件格式&quot;;</div><div class="line">&#125;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/10/bwapp-HTML-Injection/" rel="next" title="[bwapp] HTML Injection">
+                <i class="fa fa-chevron-left"></i> [bwapp] HTML Injection
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/avatar.gif"
+              alt="misaka" />
+          
+            <p class="site-author-name" itemprop="name">misaka</p>
+            <p class="site-description motion-element" itemprop="description">学习使我快乐！！！(不接受反驳)</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传-恶意文件检测"><span class="nav-number">1.</span> <span class="nav-text">文件上传 恶意文件检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端检测"><span class="nav-number">1.1.</span> <span class="nav-text">客户端检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端MIME检测"><span class="nav-number">1.2.</span> <span class="nav-text">服务端MIME检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端文件扩展名检测"><span class="nav-number">1.3.</span> <span class="nav-text">服务端文件扩展名检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端文件内容检测"><span class="nav-number">1.4.</span> <span class="nav-text">服务端文件内容检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">2.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">misaka</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博主已经辛辛苦苦滴码了6.4k字，加油</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+    <script type="text/javascript" src="/live2d/script.js"></script>
+    <canvas id="live2dcanvas" width="150" height="300" class="live2d"></canvas>
+    <style>
+      #live2dcanvas {
+        position: fixed;
+        right: 0px;
+        z-index: 999;
+        pointer-events: none;
+        bottom: -60px;
+      }
+    </style>
+    <script>loadlive2d("live2dcanvas" ,"/live2d/assets/tororo/tororo.model.json",0.5)</script>
+  	
+</body>
+</html>
