@@ -102,18 +102,18 @@
 <meta property="og:site_name" content="misaka的博客">
 <meta property="og:description" content="感觉和xss差不多哈 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/B3C6A00B4DCC445EAFE923C466C465E3/1093">
-<meta property="og:image" content="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/F32B7DC4AB2B4B9FB21F45E9F9341217/1096">
-<meta property="og:image" content="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/0A33C89B3D184BFA876D7BF1516B385D/1098">
-<meta property="og:image" content="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/0387B17978B64496B765CC9FA2DF0CA8/1100">
-<meta property="og:image" content="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/60258C1C590644C0A879B79AB2786CBC/1102">
-<meta property="og:image" content="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/1F65E8E7A5A9466BAB48866CABEF3171/1104">
-<meta property="og:image" content="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/F32B7DC4AB2B4B9FB21F45E9F9341217/1096">
-<meta property="og:updated_time" content="2018-02-23T05:50:37.779Z">
+<meta property="og:image" content="http://p4wety779.bkt.clouddn.com/2-1.png">
+<meta property="og:image" content="http://p4wety779.bkt.clouddn.com/2-2.png">
+<meta property="og:image" content="http://p4wety779.bkt.clouddn.com/2-3.png">
+<meta property="og:image" content="http://p4wety779.bkt.clouddn.com/2-4.png">
+<meta property="og:image" content="http://p4wety779.bkt.clouddn.com/2-5.png">
+<meta property="og:image" content="http://p4wety779.bkt.clouddn.com/2-6.png">
+<meta property="og:image" content="http://p4wety779.bkt.clouddn.com/2-2.png">
+<meta property="og:updated_time" content="2018-03-01T07:01:35.067Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[bwapp] HTML Injection">
 <meta name="twitter:description" content="感觉和xss差不多哈 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄">
-<meta name="twitter:image" content="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/B3C6A00B4DCC445EAFE923C466C465E3/1093">
+<meta name="twitter:image" content="http://p4wety779.bkt.clouddn.com/2-1.png">
 
 
 
@@ -334,16 +334,16 @@
 
       
         <p>感觉和xss差不多哈 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄<br><a id="more"></a></p>
-<h2 id="HTML-Injection-Reflected-GET"><a href="#HTML-Injection-Reflected-GET" class="headerlink" title="HTML Injection - Reflected (GET)"></a>HTML Injection - Reflected (GET)</h2><h3 id="low"><a href="#low" class="headerlink" title="low"></a>low</h3><p>看图，是一个登陆页面，看到登陆页面就不可避免的想到sql，可惜这个不是。<br><img src="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/B3C6A00B4DCC445EAFE923C466C465E3/1093" alt="image">  </p>
-<p>low级别的，直接来个<script>alert(“good”)</script>试一下。<br>成功弹窗<br><img src="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/F32B7DC4AB2B4B9FB21F45E9F9341217/1096" alt="image"><br>果然这个low级别的算是相当的基础了。</p>
-<h3 id="medium"><a href="#medium" class="headerlink" title="medium"></a>medium</h3><p>尝试下low级别的攻击代码<script>alert(“good”)</script><br>但是并没有弹窗，返回的是<br><img src="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/0A33C89B3D184BFA876D7BF1516B385D/1098" alt="image">  </p>
+<h2 id="HTML-Injection-Reflected-GET"><a href="#HTML-Injection-Reflected-GET" class="headerlink" title="HTML Injection - Reflected (GET)"></a>HTML Injection - Reflected (GET)</h2><h3 id="low"><a href="#low" class="headerlink" title="low"></a>low</h3><p>看图，是一个登陆页面，看到登陆页面就不可避免的想到sql，可惜这个不是。<br><img src="http://p4wety779.bkt.clouddn.com/2-1.png" alt="image">  </p>
+<p>low级别的，直接来个<script>alert(“good”)</script>试一下。<br>成功弹窗<br><img src="http://p4wety779.bkt.clouddn.com/2-2.png" alt="image"><br>果然这个low级别的算是相当的基础了。</p>
+<h3 id="medium"><a href="#medium" class="headerlink" title="medium"></a>medium</h3><p>尝试下low级别的攻击代码<script>alert(“good”)</script><br>但是并没有弹窗，返回的是<br><img src="http://p4wety779.bkt.clouddn.com/2-3.png" alt="image">  </p>
 <p>发现把我所有的输入都直接返回了，什么都没有少，这就可以初步认为这并不是过滤敏感字符串。那么可能就是将html符号实体化了，这个可以试试将符号编码。  攻击代码%3cscript%3ealert(“good”)%3c/script%3e<br>其中%3c是&lt;,%3e是&gt;<br>然后就成功弹窗了。  </p>
 <h2 id="HTML-Injection-Reflected-POST"><a href="#HTML-Injection-Reflected-POST" class="headerlink" title="HTML Injection - Reflected (POST)"></a>HTML Injection - Reflected (POST)</h2><p>post注入和get型注入其实攻击代码都一样，这是数据传入的方式不同。一个是get输入的，一个使用post。因为攻击手法相同，我就不多做记录了。</p>
 <hr>
-<h2 id="HTML-Injection-Reflected-URL"><a href="#HTML-Injection-Reflected-URL" class="headerlink" title="HTML Injection - Reflected (URL)"></a>HTML Injection - Reflected (URL)</h2><h3 id="low-1"><a href="#low-1" class="headerlink" title="low"></a>low</h3><p>这玩意以前没了解过，看界面，也没有输入点，就只返回了url。<br><img src="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/0387B17978B64496B765CC9FA2DF0CA8/1100" alt="image"><br>那就试着在url中写入攻击代码吧：?id=1;<script>alert(“good”);</script>  </p>
-<p>结果浏览器自动编码了。<br><img src="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/60258C1C590644C0A879B79AB2786CBC/1102" alt="image"><br>那就在burp中抓包改呗。  </p>
-<p><img src="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/1F65E8E7A5A9466BAB48866CABEF3171/1104" alt="image"><br>然后就成功弹窗了  </p>
-<p><img src="https://note.youdao.com/yws/public/resource/03522a3d35394632a1347e697a129b25/xmlnote/F32B7DC4AB2B4B9FB21F45E9F9341217/1096" alt="image"></p>
+<h2 id="HTML-Injection-Reflected-URL"><a href="#HTML-Injection-Reflected-URL" class="headerlink" title="HTML Injection - Reflected (URL)"></a>HTML Injection - Reflected (URL)</h2><h3 id="low-1"><a href="#low-1" class="headerlink" title="low"></a>low</h3><p>这玩意以前没了解过，看界面，也没有输入点，就只返回了url。<br><img src="http://p4wety779.bkt.clouddn.com/2-4.png" alt="image"><br>那就试着在url中写入攻击代码吧：?id=1;<script>alert(“good”);</script>  </p>
+<p>结果浏览器自动编码了。<br><img src="http://p4wety779.bkt.clouddn.com/2-5.png" alt="image"><br>那就在burp中抓包改呗。  </p>
+<p><img src="http://p4wety779.bkt.clouddn.com/2-6.png" alt="image"><br>然后就成功弹窗了  </p>
+<p><img src="http://p4wety779.bkt.clouddn.com/2-2.png" alt="image"></p>
 
       
     </div>
